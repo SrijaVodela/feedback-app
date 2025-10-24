@@ -5,12 +5,14 @@ pipeline {
         DOCKER_IMAGE = "srijavodela/feedback-app"
         DOCKER_USER = "srijavodela"
         DOCKER_PASS = "Srija1@Praneetha"
+        // Ensure you have added this path in Jenkins Global Properties
+        KUBECONFIG = "C:\\Users\\Srija\\.kube\\config"
     }
 
     stages {
         stage('Checkout') {
             steps {
-                echo "Pulling code from repository..."
+                echo "Pulling code from GitHub..."
                 git branch: 'main', url: 'https://github.com/SrijaVodela/feedback-app.git'
             }
         }
@@ -37,6 +39,7 @@ pipeline {
                 echo "Deploying application to Kubernetes..."
                 bat "kubectl apply -f deployment.yaml"
                 bat "kubectl apply -f service.yaml"
+                bat "kubectl get pods"  // Optional, verify deployment
             }
         }
     }
