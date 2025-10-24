@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>View Feedbacks</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>All Feedbacks</h1>
+    <p><a href="/">Submit new feedback</a></p>
+    {% if feedbacks %}
+      <table>
+        <thead><tr><th>#</th><th>Name</th><th>Email</th><th>Message</th><th>When</th></tr></thead>
+        <tbody>
+          {% for f in feedbacks %}
+            <tr>
+              <td>{{ f['id'] }}</td>
+              <td>{{ f['name'] }}</td>
+              <td>{{ f['email'] }}</td>
+              <td>{{ f['message'] }}</td>
+              <td>{{ f['created_at'] }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <p>No feedback yet.</p>
+    {% endif %}
+  </div>
+</body>
+</html>
