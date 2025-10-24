@@ -2,48 +2,41 @@ pipeline {
     agent any
 
     environment {
-        DOCKERHUB_CREDENTIALS = credentials('dockerhub-credentials') // Jenkins credential ID
         DOCKER_IMAGE = "srijavodela/feedback-app"
+        DOCKER_USER = "srijavodela"
+        DOCKER_PASS = "Srija1@Praneetha"
     }
 
     stages {
         stage('Checkout') {
             steps {
                 echo "Pulling code from repository..."
-                git 'https://github.com/yourusername/feedback-app.git' // replace with your actual repo URL
+                git 'https://github.com/SrijaVodela/feedback-app.git'
             }
         }
 
         stage('Build Docker Image') {
             steps {
-                script {
-                    echo "Building Docker image..."
-                    sh 'docker build -t $DOCKER_IMAGE:latest .'
-                }
+                echo "Building Docker image..."
+                bat "docker build -t %DOCKER_IMAGE%:latest ."
             }
         }
 
         stage('Push Docker Image') {
             steps {
-                script {
-                    echo "Pushing image to Docker Hub..."
-                    sh """
-                    echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin
-                    docker push $DOCKER_IMAGE:latest
-                    """
-                }
+                echo "Logging in to Docker Hub and pushing image..."
+                bat """
+                    echo %DOCKER_PASS% | docker login -u %DOCKER_USER% --password-stdin
+                    docker push %DOCKER_IMAGE%:latest
+                """
             }
         }
 
         stage('Deploy to Kubernetes') {
             steps {
-                script {
-                    echo "Deploying application to Kubernetes..."
-                    sh """
-                    kubectl apply -f deployment.yaml
-                    kubectl apply -f service.yaml
-                    """
-                }
+                echo "Deploying application to Kubernetes..."
+                bat "kubectl apply -f deployment.yaml"
+                bat "kubectl apply -f service.yaml"
             }
         }
     }
