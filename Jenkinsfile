@@ -11,7 +11,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 echo "Pulling code from repository..."
-                git 'https://github.com/SrijaVodela/feedback-app.git'
+                git branch: 'main', url: 'https://github.com/SrijaVodela/feedback-app.git'
             }
         }
 
